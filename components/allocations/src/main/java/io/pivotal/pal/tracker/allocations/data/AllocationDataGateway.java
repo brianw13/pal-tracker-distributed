@@ -1,5 +1,7 @@
 package io.pivotal.pal.tracker.allocations.data;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -16,6 +18,8 @@ import static java.sql.Statement.RETURN_GENERATED_KEYS;
 @Repository
 public class AllocationDataGateway {
 
+    protected final Logger log = LoggerFactory.getLogger(getClass());
+
     private JdbcTemplate jdbcTemplate;
 
     public AllocationDataGateway(DataSource dataSource) {
@@ -25,6 +29,8 @@ public class AllocationDataGateway {
 
     public AllocationRecord create(AllocationFields fields) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        log.debug(fields.toString());
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(

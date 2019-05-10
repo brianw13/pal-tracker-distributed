@@ -3,6 +3,8 @@ package io.pivotal.pal.tracker.allocations;
 import io.pivotal.pal.tracker.allocations.data.AllocationDataGateway;
 import io.pivotal.pal.tracker.allocations.data.AllocationFields;
 import io.pivotal.pal.tracker.allocations.data.AllocationRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,8 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("/allocations")
 public class AllocationController {
 
+    protected final Logger log = LoggerFactory.getLogger(getClass());
+
     private final AllocationDataGateway gateway;
     private final ProjectClient client;
 
@@ -29,6 +33,8 @@ public class AllocationController {
 
     @PostMapping
     public ResponseEntity<AllocationInfo> create(@RequestBody AllocationForm form) {
+
+        log.debug("ResponseEntity(): " + form.toString());
 
         if (projectIsActive(form.projectId)) {
             AllocationRecord record = gateway.create(formToFields(form));
